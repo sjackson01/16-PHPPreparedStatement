@@ -33,6 +33,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $subject = strip_tags($_POST['subject']);
     $body = strip_tags($_POST['body']);
 
+    // Execute the query: 
+    $stmt->execute();
+
+    // Print a message based upon the result:
+    if ($stmt->affected_row == 1){
+           echo '<p>Your message has been posted.</p>';
+        } else {
+           echo '<p style="font-weight: bold; color: #C00">Your message could not be posted.</p>';
+           echo '<p>' . $stmt->error . '</p>';
+        }
+    
+        // Close the statement:
+        $stmt->close();
+        unset($mysqli);
+
 
 } // End of submission IF.
 
