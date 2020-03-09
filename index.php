@@ -10,12 +10,29 @@
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+    // Connect to the database: 
+    $myslqi = new MySQLi('mysql:3306', 'root', 'tiger', 'forum');
+    $mysqli->set_charset('utf8');
+
+    // Make the query:
+    $q = 'INSERT INTO messages (forum_id, parent_id, user_id, 
+          subject, body, date_entered) 
+          VALUES (?, ?, ?, ?, ?, 
+          NOW())';
+
+    // Prepare the statement
+    $stmt = $mysqli->prepare($q);
+    
+    // Bind the variables:
+    $stmt->bind_param('iiiss', $forum_id, $parent_id, $user_id, $subject, $body);
+
     // Assign the values to variables:
     $forum_id = (int) $_POST['forum_id'];
     $parent_id = (int) $_POST['parent_id'];
     $user_id = 3; // The user_id value would normally come from the session.
     $subject = strip_tags($_POST['subject']);
     $body = strip_tags($_POST['body']);
+
 
 } // End of submission IF.
 
