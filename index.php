@@ -12,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Connect to the database: 
     $mysqli = new MySQLi('mysql:3306', 'root', 'tiger', 'forum');
+    $mysqli->set_charset('utf8');
 
     // Make the query:
     $q = 'INSERT INTO messages (forum_id, parent_id, user_id, subject, body,
