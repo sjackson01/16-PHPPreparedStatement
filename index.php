@@ -11,14 +11,11 @@
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Connect to the database: 
-    $myslqi = new MySQLi('mysql:3306', 'root', 'tiger', 'forum');
-    $mysqli->set_charset('utf8');
+    $mysqli = new MySQLi('mysql:3306', 'root', 'tiger', 'forum');
 
     // Make the query:
-    $q = 'INSERT INTO messages (forum_id, parent_id, user_id, 
-          subject, body, date_entered) 
-          VALUES (?, ?, ?, ?, ?, 
-          NOW())';
+    $q = 'INSERT INTO messages (forum_id, parent_id, user_id, subject, body,
+       date_entered) VALUES (?, ?, ?, ?, ?, NOW())';
 
     // Prepare the statement
     $stmt = $mysqli->prepare($q);
@@ -37,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->execute();
 
     // Print a message based upon the result:
-    if ($stmt->affected_row == 1){
+    if ($stmt->affected_rows == 1){
            echo '<p>Your message has been posted.</p>';
         } else {
            echo '<p style="font-weight: bold; color: #C00">Your message could not be posted.</p>';
@@ -53,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // Display the form:
 ?>
-<form action="post_message.php" method="post">
+<form action="index.php" method="post">
 
     <fieldset><legend>Post a message:</legend>
     
