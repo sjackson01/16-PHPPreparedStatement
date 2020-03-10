@@ -10,6 +10,19 @@
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+    // Connect to the database: 
+    $mysqli = new MySQLi('mysql:3306', 'root', 'tiger', 'forum');
+
+    // Make the query:
+    $q = 'INSERT INTO messages (forum_id, parent_id, user_id, subject, body,
+       date_entered) VALUES (?, ?, ?, ?, ?, NOW())';
+
+    // Prepare the statement
+    $stmt = $mysqli->prepare($q);
+    
+    // Bind the variables:
+    $stmt->bind_param('iiiss', $forum_id, $parent_id, $user_id, $subject, $body);
+
     // Assign the values to variables:
     $forum_id = (int) $_POST['forum_id'];
     $parent_id = (int) $_POST['parent_id'];
@@ -17,11 +30,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $subject = strip_tags($_POST['subject']);
     $body = strip_tags($_POST['body']);
 
+    // Execute the query: 
+    $stmt->execute();
+
+    // Print a message based upon the result:
+    if ($stmt->affected_rows == 1){
+           echo '<p>Your message has been posted.</p>';
+        } else {
+           echo '<p style="font-weight: bold; color: #C00">Your message could not be posted.</p>';
+           echo '<p>' . $stmt->error . '</p>';
+        }
+    
+        // Close the statement:
+        $stmt->close();
+        unset($mysqli);
+
+
 } // End of submission IF.
 
 // Display the form:
 ?>
-<form action="post_message.php" method="post">
+<form action="index.php" method="post">
 
     <fieldset><legend>Post a message:</legend>
     
